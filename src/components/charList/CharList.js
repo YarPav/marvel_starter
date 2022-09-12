@@ -1,72 +1,54 @@
 import './charList.scss';
-import {Component} from "react";
+import {useState, useEffect} from "react";
 import MarvelService from "../../services/MarvelService";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Spinner from "../spinner/Spinner";
 
-class CharList extends Component {
-    componentDidMount() {
-        this.updateCharactersList();
-    }
-    componentDidUpdate(prevProps, prevState) {
+const CharList = (props) => {
+    const service = new MarvelService();
 
-        if (this.state.uploadCount !== prevState.uploadCount) {
-            this.updateCharactersList();
-            console.log('update', this.state.uploadCount);
-        }
-    }
+    const [charactersList, setCharactersList] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [uploadCount, setUploadCount] = useState(0);
+    const [isAllCharactersUploaded, setIsAllCharactersUploaded] = useState(false);
+    useEffect(() => {
+        updateCharactersList();
+    }, [uploadCount]);
 
-    service = new MarvelService();
-    state = {
-        charactersList: [],
-        loading: true,
-        error: false,
-        uploadCount: 0,
-        isAllCharactersUploaded: false
+    const onError = () => {
+        setLoading(false);
+        setError(true);
     }
-
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        });
-    }
-    onCharactersLoaded = (charactersList) => {
+    const onCharactersLoaded = (charactersList) => {
         const isAllCharactersUploaded = charactersList.length < 9;
-        this.setState(state => ({
-            charactersList:  state.charactersList.slice().concat(charactersList),
-            loading: false,
-            isAllCharactersUploaded
-        }));
+        setCharactersList(state => state.slice().concat(charactersList));
+        setLoading(false);
+        setIsAllCharactersUploaded(isAllCharactersUploaded);
     }
-    updateCharactersList = () => {
-        this.service.getAllCharacters(this.state.uploadCount)
-            .then(this.onCharactersLoaded)
-            .catch(this.onError)
+    const updateCharactersList = () => {
+        service.getAllCharacters(uploadCount)
+            .then(onCharactersLoaded)
+            .catch(onError)
     }
-    uploadCharactersClick = () => {
-        this.setState(state => ({
-            uploadCount: state.uploadCount + 1
-        }));
+    const uploadCharactersClick = () => {
+        setUploadCount(state => state + 1);
     }
-    render() {
-        const {charactersList, loading, error} = this.state;
-        const errorMessage = error ? <ErrorMessage/> : null,
-            spinner = loading ? <Spinner/> : null,
-            content = !(loading || error) ? <View data={charactersList}
-                                                  uploadCharactersClick={this.uploadCharactersClick}
-                                                  isAllCharactersUploaded={this.state.isAllCharactersUploaded}
-                                                  onCharacterSelected=
-                                                      {this.props.onCharacterSelected}/> : null;
-        return (
-            <div className="char__list">
-                {errorMessage}
-                {spinner}
-                {content}
+    const errorMessage = error ? <ErrorMessage/> : null,
+        spinner = loading ? <Spinner/> : null,
+        content = !(loading || error) ? <View data={charactersList}
+                                              uploadCharactersClick={uploadCharactersClick}
+                                              isAllCharactersUploaded={isAllCharactersUploaded}
+                                              onCharacterSelected=
+                                                  {props.onCharacterSelected}/> : null;
+    return (
+        <div className="char__list">
+            {errorMessage}
+            {spinner}
+            {content}
 
-            </div>
-        )
-    }
+        </div>
+    );
 }
 
 const View = ({data, onCharacterSelected, uploadCharactersClick, isAllCharactersUploaded}) => {
