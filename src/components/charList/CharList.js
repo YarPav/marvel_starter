@@ -1,35 +1,27 @@
 import './charList.scss';
 import {useState, useEffect} from "react";
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/UseMarvelService";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Spinner from "../spinner/Spinner";
 
 const CharList = (props) => {
-    const service = new MarvelService();
+    const {loading, error, getAllCharacters} = useMarvelService();
 
     const [charactersList, setCharactersList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const [uploadCount, setUploadCount] = useState(0);
     const [isAllCharactersUploaded, setIsAllCharactersUploaded] = useState(false);
     useEffect(() => {
         updateCharactersList();
     }, [uploadCount]);
 
-    const onError = () => {
-        setLoading(false);
-        setError(true);
-    }
     const onCharactersLoaded = (charactersList) => {
         const isAllCharactersUploaded = charactersList.length < 9;
         setCharactersList(state => state.slice().concat(charactersList));
-        setLoading(false);
         setIsAllCharactersUploaded(isAllCharactersUploaded);
     }
     const updateCharactersList = () => {
-        service.getAllCharacters(uploadCount)
+        getAllCharacters(uploadCount)
             .then(onCharactersLoaded)
-            .catch(onError)
     }
     const uploadCharactersClick = () => {
         setUploadCount(state => state + 1);
@@ -45,7 +37,11 @@ const CharList = (props) => {
         <div className="char__list">
             {errorMessage}
             {spinner}
-            {content}
+            <View data={charactersList}
+                  uploadCharactersClick={uploadCharactersClick}
+                  isAllCharactersUploaded={isAllCharactersUploaded}
+                  onCharacterSelected=
+                      {props.onCharacterSelected}/>
 
         </div>
     );
