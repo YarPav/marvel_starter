@@ -11,15 +11,18 @@ const CharList = (props) => {
     const [uploadCount, setUploadCount] = useState(0);
     const [isAllCharactersUploaded, setIsAllCharactersUploaded] = useState(false);
     useEffect(() => {
+        console.log(uploadCount);
         updateCharactersList();
     }, [uploadCount]);
 
     const onCharactersLoaded = (charactersList) => {
         const isAllCharactersUploaded = charactersList.length < 9;
         setCharactersList(state => state.slice().concat(charactersList));
+        console.log(charactersList);
         setIsAllCharactersUploaded(isAllCharactersUploaded);
     }
     const updateCharactersList = () => {
+        console.log('update');
         getAllCharacters(uploadCount)
             .then(onCharactersLoaded)
     }
@@ -48,6 +51,7 @@ const CharList = (props) => {
 }
 
 const View = ({data, onCharacterSelected, uploadCharactersClick, isAllCharactersUploaded}) => {
+    console.log(data);
     return (
         <>
             <ul className="char__grid">

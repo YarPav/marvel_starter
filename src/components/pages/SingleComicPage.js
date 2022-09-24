@@ -1,26 +1,27 @@
-import '../pages/singleComic.scss';
-import xMen from '../../resources/img/x-men.png';
+import './singleComic.scss';
 import useMarvelService from "../../services/UseMarvelService";
 import {useState, useEffect} from "react";
-import Skeleton from "../skeleton/Skeleton";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Spinner from "../spinner/Spinner";
+import {useParams} from "react-router";
+import {Link} from "react-router-dom";
 
 const SingleComic = (props) => {
+    const {comicId} = useParams();
     const [comic, setComic] = useState(null);
 
     const {loading, error, getComic, clearError} = useMarvelService();
 
     useEffect(() => {
         updateComic();
-    }, [props.comicId]);
+    }, [comicId]);
 
     const onComicLoaded = (comic) => {
         setComic(comic);
     }
     const updateComic = () => {
         clearError();
-        const id = props.comicId;
+        const id = comicId;
         // id = 1017100;
         if (!id) {
             return;
@@ -59,7 +60,7 @@ const View = ({comic}) => {
                     <p className="single-comic__descr">Language: {lang}</p>
                     <div className="single-comic__price">{price}$</div>
                 </div>
-                <a href="#" className="single-comic__back">Back to all</a>
+                <Link to='/comics'  className="single-comic__back">Back to all</Link>
             </div>
         </>
     );
