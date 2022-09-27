@@ -1,5 +1,5 @@
 import './charList.scss';
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import useMarvelService from "../../services/UseMarvelService";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Spinner from "../spinner/Spinner";
@@ -11,18 +11,14 @@ const CharList = (props) => {
     const [uploadCount, setUploadCount] = useState(0);
     const [isAllCharactersUploaded, setIsAllCharactersUploaded] = useState(false);
     useEffect(() => {
-        console.log(uploadCount);
         updateCharactersList();
     }, [uploadCount]);
-
-    const onCharactersLoaded = (charactersList) => {
-        const isAllCharactersUploaded = charactersList.length < 9;
-        setCharactersList(state => state.slice().concat(charactersList));
-        console.log(charactersList);
+    const onCharactersLoaded = (newCharactersList) => {
+        const isAllCharactersUploaded = newCharactersList.length < 9;
+        setCharactersList(state => [...state, ...newCharactersList]);
         setIsAllCharactersUploaded(isAllCharactersUploaded);
     }
     const updateCharactersList = () => {
-        console.log('update');
         getAllCharacters(uploadCount)
             .then(onCharactersLoaded)
     }
@@ -30,12 +26,7 @@ const CharList = (props) => {
         setUploadCount(state => state + 1);
     }
     const errorMessage = error ? <ErrorMessage/> : null,
-        spinner = loading ? <Spinner/> : null,
-        content = !(loading || error) ? <View data={charactersList}
-                                              uploadCharactersClick={uploadCharactersClick}
-                                              isAllCharactersUploaded={isAllCharactersUploaded}
-                                              onCharacterSelected=
-                                                  {props.onCharacterSelected}/> : null;
+        spinner = loading ? <Spinner/> : null;
     return (
         <div className="char__list">
             {errorMessage}
@@ -51,7 +42,6 @@ const CharList = (props) => {
 }
 
 const View = ({data, onCharacterSelected, uploadCharactersClick, isAllCharactersUploaded}) => {
-    console.log(data);
     return (
         <>
             <ul className="char__grid">
@@ -77,5 +67,6 @@ const View = ({data, onCharacterSelected, uploadCharactersClick, isAllCharacters
         </>
     );
 }
+
 
 export default CharList;

@@ -12,7 +12,7 @@ const useMarvelService = () => {
          let offset = uploadCount * _charactersOnPage;
          const res = await request
          (`${_apiBase}characters?offset=${offset}&limit=${_charactersOnPage}&${_apiKey}`);
-         return res.data.results.map(_transformCharacter);
+        return res.data.results.map(_transformCharacter);
     }
     const getAllComics = async (uploadCount) => {
         let offset = uploadCount * _comicsOnPage;
@@ -33,15 +33,17 @@ const useMarvelService = () => {
     }
 
     const _transformCharacter = (character) => {
-         return {
-             id: character.id,
-             name: character.name,
-             description: character.description,
-             thumbnail: character.thumbnail.path + '.' + character.thumbnail.extension,
-             homepage: character.urls[0].url,
-             wiki: character.urls[1].url,
-             comics: character.comics.items
-         }
+        const data = {
+            id: character.id,
+            name: character.name,
+            description: character.description,
+            thumbnail: character.thumbnail.path + '.' + character.thumbnail.extension,
+            homepage: character.urls[0].url,
+            wiki: character.urls[1].url,
+            comics: character.comics.items
+        }
+        // console.log(data);
+         return data;
     }
     const _transformComic = (comic) => {
         return {
