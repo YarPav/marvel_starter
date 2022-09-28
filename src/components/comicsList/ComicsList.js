@@ -1,7 +1,7 @@
 import './comicsList.scss';
 import {useEffect, useState} from "react";
 import useMarvelService from "../../services/UseMarvelService";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spinner from "../spinner/Spinner";
 import {Link} from "react-router-dom";
 

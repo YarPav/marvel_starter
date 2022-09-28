@@ -3,7 +3,7 @@ import xMen from '../../resources/img/x-men.png';
 import useMarvelService from "../../services/UseMarvelService";
 import {useState, useEffect} from "react";
 import Skeleton from "../skeleton/Skeleton";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spinner from "../spinner/Spinner";
 
 const SingleComic = (props) => {

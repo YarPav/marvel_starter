@@ -1,7 +1,7 @@
 import './charList.scss';
 import {useState, useEffect, useRef} from "react";
 import useMarvelService from "../../services/UseMarvelService";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spinner from "../spinner/Spinner";
 
 const CharList = (props) => {

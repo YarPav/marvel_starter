@@ -45,8 +45,8 @@ import withPageItem from "../withPageItem/WithPageItem";
 //     )
 // }
 
-const SingleComic = (props) => {
-    console.log('comic page');
+const SingleCharacter = (props) => {
+    console.log('char page');
     const {name, description, thumbnail, price, lang, pageCount} = props.data,
         imgStyle = {
             objectFit: thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
@@ -59,16 +59,13 @@ const SingleComic = (props) => {
                 <div className="single-comic__info">
                     <h2 className="single-comic__name">{name}</h2>
                     <p className="single-comic__descr">{description}</p>
-                    <p className="single-comic__descr">{pageCount} pages</p>
-                    <p className="single-comic__descr">Language: {lang}</p>
-                    <div className="single-comic__price">{price}$</div>
                 </div>
-                <Link to='/comics'  className="single-comic__back">Back to all</Link>
+                <Link to='/'  className="single-comic__back">Back to all</Link>
             </div>
         </>
     );
 }
 
-const SingleComicPage = withPageItem(SingleComic, 'getComic');
+const SingleCharacterPage = withPageItem(SingleCharacter, 'getCharacter');
 
-export default SingleComicPage;
+export default SingleCharacterPage;
